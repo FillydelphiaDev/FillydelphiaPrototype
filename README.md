@@ -5,8 +5,8 @@
 #### What is it? ####
 At the moment, this is a project aimed to make a playable prototype of a isometric, 3D Fallout: Equestria game, that can be classified as top-down shooter RPG, inspired from such titles as [Alien Shooter](https://www.youtube.com/watch?v=-xinLOQRS4U) and Fallout 1/2.
 
-*Dialogue UI concept art (Click to view)*  
-<a href="Docs/Old/Dialogue2-Snapshot-3.png" target="_blank"><img src="Docs/Old/Dialogue2-Snapshot-3.png" width="30%"/></a>
+*Dialogue UI concept art (old)*  
+<img src="Docs/Old/Dialogue2-Snapshot-3.png" width="30%"/>
 
 #### How much of it is RPG and how much of it is shooter? ####
 Shooter comes the first. No RPG element should stand in a way of having fun shooting some raiders.
