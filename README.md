@@ -36,7 +36,7 @@ Please join [our Discord server](https://discord.gg/ybrMuCr) if you want to make
 
 ### Game ###
 + **Engine**: Unity 2020.1
-+ **Graphics**: Universal Render Pipeline 9.0
++ **Graphics**: Universal Render Pipeline 8
 + **Input**: Input System 1.0 - *Even though it's in preview, it's good enough for PC dev*
 + **UI**: uGUI + UI Toolkit for editor UI.
 
