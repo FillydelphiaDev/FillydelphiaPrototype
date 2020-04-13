@@ -13,6 +13,7 @@
   + **development** - dev branch. Small changes can be merged here right away. For bigger ones please use feature branches.
 + **When concept turns into a feature open issue for it.**
 + **Use draft pull requests for big features.**
++ **Don't push SVGs exported from draw.io.** Push .drawio file and .png export instead.
 
 ## Game ##
 + **Terrain level is always at Y=0.** There's no elevation change within the level. It's always flat. Characters can't be below terrain level.
