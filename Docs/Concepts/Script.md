@@ -11,9 +11,9 @@ The only source of light in the cave (besides the dim glow of your [PipBuck]) is
 [PipBuck]'s magic radiation detector immediately starts to click. As you eye the room lit only by the red glow of emergency lights, you  see signs of a failed defense: shattered barricades, empty ammo boxes and skeletons in stable uniform. Defenders had no chance - they were attacked from all sides, and had no way to open the gear door.  
 What's strange here is that there's no bullet marks from enemy's fire, like attackers used bare hooves. There's only two possible explanations: either this stable's experiment is mandatory unarmed combat training, or... your thought was interrupted by piercing screech from somewhere inside the stable. Doesn't matter what you expected, but now you know that this search won't be an easy one - red dots appearing at the corner of your eyes confirm that.  
 
-### Act 2: Utilities ###
+### Act 2: Way to Atrium ###
 
-Your way to the overmare's office isn't that easy that you thought. Door to the atrium is locked down and elevator is not in working condition lightly speaking. Unfortunately, you don't know nearly enough Hacking or Repair to open the door or fix the elevator. That leaves you with the only possible way: into the utility areas.  
+Your fast way to the overmare's office is blocked: door to the atrium is locked down and elevator is not in working condition lightly speaking. Unfortunately, you don't know nearly enough **hacking** or **repair** to open the door or to fix the elevator. That leaves you with the only possible way: into the utility areas.  
 
 Just as you enter utility you see a ghoul slowly walking away from you until he's around the corner. You proceed to carefully inspect the rooms. You have to take down individual ghouls as you moving between rooms. So far all loot you found was industrial junk and other scrap.  
 
@@ -24,25 +24,25 @@ You found a locked door. Thankfully, you know basic lockpicking. There is a term
 
 ![RED_SQUARE] TODO: Reference art of a pony skeleton at the table with a terminal on the table.  
 
-You stumble upon an open door leading to reactor. Radiation levels increased as you come closer. All you see inside is a collapsed tunnel. There's no way further. You also saw a door to depot, but it was locked from the other side. After a few dead ghouls, you reached the door to atrium.  
+You stumble upon an open door leading to reactor. Radiation levels increased as you come closer. All you see inside is a collapsed tunnel. There's no way further. You also saw a door to storage section, but it was locked from the other side. After a few dead ghouls, you reached the door to atrium.  
 
 ### Act 3: Atrium ###
 
-![RED_SQUARE] TODO: Player clears atrium from ghouls; checks on cafeteria, school with tons of propaganda, medical ward with a terminal with records, and living quarters with some stories inside.  
+![RED_SQUARE] TODO: Player clears atrium from ghouls; checks on medical ward with a terminal with records, and living quarters with cafeteria, school with tons of propaganda, and some stories inside.  
 
-### Act 4: Overmare's Office ###
+### Act 4: Security ###
 
-![RED_SQUARE] TODO: Terminal contains instructions for overmare from Stable-Tec, Starlight's thoughts on various things including the coup attempt, and command to open the tunnel to cutiemark storage. Player can't activate it, because there's not enough power. Now player is asked to turn on the reactor. The only way to reactor is through depot.  
+![RED_SQUARE] TODO: Player checks on security and finds notes about their response to the coup. Also, player optionally checks on Armory, until finally going for overmare's office. Her terminal contains instructions for overmare from Stable-Tec, Starlight's thoughts on various things including the coup attempt, and command to open the tunnel to cutiemark storage. Player can't activate it, because there's not enough power. Now player is asked to turn on the reactor. The only way to reactor is through storage.  
 
-### Act 5: Depot ###
+### Act 5: Road to Reactor ###
 
-![RED_SQUARE] TODO: Door, surprisingly, is open. There is signs of cut-in attempt. Player finds out that rebels inside waited until everyone outside died made an attempt to leave the stable.  
+![RED_SQUARE] TODO: You go through the gardens until you reach storage. Door, surprisingly, is open. There is signs of cut-in attempt. Player finds out that rebels inside waited until everyone outside died and made an attempt to leave the stable.  
 
-### Act 6: Reactor ###
+### Act 6: Bringing Power ###
 
 ![RED_SQUARE] TODO: Reactor level is time-based. You turn on the reactor in two stages, with a mini boss battle with The Glowing One in between.  
 
-### Act 7: Cutiemark Storage ###
+### Act 7: The Overmare ###
 
 ![RED_SQUARE] TODO: After player returns to the Overmare's office, he notices that there's new note on the terminal. It's from Starlight, and she says that she's waiting for player in the cutiemark storage. Player needs to defeat the overmare to win the game.  
 
