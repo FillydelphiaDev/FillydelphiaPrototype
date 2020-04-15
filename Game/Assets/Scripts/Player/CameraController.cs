@@ -32,13 +32,13 @@ namespace Player
         }
 
         [Header("Settings")]
-        [Tooltip("Horizontal size of camera's viewport. Zoom will be adjusted to fit this size.")]
+        [Tooltip("Minimal size of camera's viewport. Zoom will be adjusted to fit this size.")]
         [SerializeField]
-        private float horizontalViewSize = 30.0F;
-
-        [Tooltip("A minimal distance of a player from the view zone edges.")]
+        private float minViewSize = 30.0F;
+        
+        [Tooltip("The max camera offset by X and Z axes.")]
         [SerializeField]
-        private Vector2 minPlayerDistance = new Vector2(2.0F, 1.0F);
+        private Vector2 maxViewOffset = new Vector2(15.0F, 15.0F);
 
         [Tooltip("Speed of camera adjusting for mouse pos. Time is current distance " +
                  "and value is max adjusted distance per frame.")]
@@ -91,7 +91,16 @@ namespace Player
         private void AdjustCameraZoom()
         {
             float aspect = controlled.pixelWidth / (float) controlled.pixelHeight;
-            controlled.orthographicSize = horizontalViewSize / aspect / 2.0F;
+            // Make sure that min view size is consistent for all screens
+            if (aspect < 1.0F)
+            {
+                // If horizontal dim is the small one - adjust for aspect ratio
+                controlled.orthographicSize = minViewSize / aspect / 2.0F;
+            }
+            else
+            {
+                controlled.orthographicSize = minViewSize / 2.0F;
+            }
         }
 
         private void CalcNewScreenPos()
@@ -110,41 +119,15 @@ namespace Player
             screenPos += delta;
         }
 
-        private Vector3 CalcMaxOffset()
-        {
-            Vector3 start = GeometryUtils
-                .GroundAndRayIntersection(controlled.ViewportPointToRay(Vector3.zero))
-                .GetValueOrDefault();
-            Vector3 intersectionX = GeometryUtils
-                .GroundAndRayIntersection(controlled.ViewportPointToRay(new Vector3(1.0F, 0.0F)))
-                .GetValueOrDefault();
-            Vector3 intersectionY = GeometryUtils
-                .GroundAndRayIntersection(controlled.ViewportPointToRay(new Vector3(0.0F, 1.0F)))
-                .GetValueOrDefault();
-
-            if (Log.IsDebugEnabled)
-            {
-                Debug.DrawLine(start, intersectionX, Color.red);
-                Debug.DrawLine(start, intersectionY, Color.green);
-            }
-
-            return new Vector3
-            {
-                x = Vector3.Distance(start, intersectionX) / 2.0F - minPlayerDistance.x,
-                z = Vector3.Distance(start, intersectionY) / 2.0F - minPlayerDistance.y
-            };
-        }
-
         private Vector3 CalcWorldOffset()
         {
-            Vector3 maxOffset = CalcMaxOffset();
-
             // Calc rotated axes
             Quaternion rotation = Quaternion.AngleAxis(cameraRotation, Vector3.up);
             Vector3 xOffsetAxis = rotation * new Vector3(1.0F, 0.0F, 0.0F);
             Vector3 zOffsetAxis = rotation * new Vector3(0.0F, 0.0F, 1.0F);
 
-            Vector3 offset = Vector3.Scale(maxOffset, new Vector3(screenPos.x, 0.0F, screenPos.y));
+            Vector3 offset = Vector3.Scale(new Vector3(maxViewOffset.x, 1.0F, maxViewOffset.y),
+                new Vector3(screenPos.x, 0.0F, screenPos.y));
             Vector3 worldOffset = xOffsetAxis * offset.x + zOffsetAxis * offset.z;
 
             if (Log.IsDebugEnabled)

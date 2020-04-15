@@ -13,7 +13,7 @@ Dynamic camera controlled by mouse position.
 
 #### Settings ####
 
-+ **Horizontal View Size** - how much of the world is shown horizontally in meters. The vertical value depends on the screen aspect ratio.  
-+ **Min Player Distance** - a minimal distance of a player from a camera offset plane's horizontal and vertical edges in meters.
++ **Min View Size** - the minimal world size shown by an axis. Generally it's determined by the vertical axis, but for very narrow screens it's the horizontal axis.
++ **Max View Offset** - the maximum offset that could be used on **Offset Object** by X and Z axes.
 + **Adjusting Speed** - a curve to set a max speed for camera adjusting for the cursor position. On horizontal axis is how big difference between current offset pos and cursor pos is (0 - no difference, 1 - a full screen of difference), and on the vertical is how much adjusting per frame is allowed.
 + **Camera Rotation** - used camera rotation.
