@@ -1,0 +1,52 @@
+{
+    "name": "GameInput",
+    "maps": [
+        {
+            "name": "Player",
+            "id": "e2c0eede-5a78-44c5-9235-6eb0b30c7fc1",
+            "actions": [
+                {
+                    "name": "CursorDelta",
+                    "type": "Button",
+                    "id": "e42ca749-f29a-4445-be42-db06cb9bd1e2",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "CursorPosition",
+                    "type": "Button",
+                    "id": "8706afd4-edd9-4692-9c26-add4d3be8edd",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "d6b649d3-33c4-4b77-9cc8-6634367bb354",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CursorDelta",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "44f4f939-1dce-4215-b75c-a5dcaebb24ce",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CursorPosition",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

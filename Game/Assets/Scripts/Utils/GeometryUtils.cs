@@ -81,6 +81,22 @@ namespace Utils
             return true;
         }
 
+        public static Vector3? GroundAndRayIntersection(Ray ray)
+        {
+            return PlaneAndRayIntersection(Vector3.zero, Vector3.up, ray);
+        }
+
+        public static Vector3? GroundAndRayIntersection(Vector3 rayOrigin, Vector3 rayDirection)
+        {
+            return PlaneAndRayIntersection(Vector3.zero, Vector3.up, rayOrigin, rayDirection);
+        }
+
+        public static Vector3? PlaneAndRayIntersection(Vector3 planePoint, Vector3 planeNormal,
+            Ray ray)
+        {
+            return PlaneAndRayIntersection(planePoint, planeNormal, ray.origin, ray.direction);
+        }
+
         public static Vector3? PlaneAndRayIntersection(Vector3 planePoint, Vector3 planeNormal,
             Vector3 rayOrigin, Vector3 rayDir)
         {
