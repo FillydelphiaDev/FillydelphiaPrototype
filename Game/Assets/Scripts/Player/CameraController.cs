@@ -11,6 +11,8 @@ namespace Player
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(CameraController));
 
+        // Hardcoded camera Y angle <3
+        private const float CameraYAngle = 45.0F;
         private const float ViewZoneAdjustStep = 2.0F;
         private const float ViewZoneAdjustError = 0.01F;
 
@@ -44,9 +46,6 @@ namespace Player
                  "and value is max adjusted distance per frame.")]
         [SerializeField]
         private AnimationCurve adjustingSpeed = AnimationCurve.EaseInOut(0.0F, 0.02F, 1.0F, 0.1F);
-
-        [SerializeField]
-        private float cameraRotation = 45.0F;
 
         private Camera controlled;
 
@@ -122,7 +121,7 @@ namespace Player
         private Vector3 CalcWorldOffset()
         {
             // Calc rotated axes
-            Quaternion rotation = Quaternion.AngleAxis(cameraRotation, Vector3.up);
+            Quaternion rotation = Quaternion.AngleAxis(CameraYAngle, Vector3.up);
             Vector3 xOffsetAxis = rotation * new Vector3(1.0F, 0.0F, 0.0F);
             Vector3 zOffsetAxis = rotation * new Vector3(0.0F, 0.0F, 1.0F);
 
