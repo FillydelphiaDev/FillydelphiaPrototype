@@ -6,14 +6,18 @@
 + [**Game/**](/Game) - Unity project directory.
 
 ## General ##
-+ **Always leave an empty line at the end.**
 + **Project general naming convention is UpperCamelCase.**
++ **When concept turns into a feature open an issue for it.**
++ **Don't push SVGs exported from draw.io.** Push .drawio file and .png export instead.
+
+## Git ##
++ **Always leave an empty line at the end.**
 + **Git branches:**
   + **production** - release branch.
   + **development** - dev branch. Small changes can be merged here right away. For bigger ones please use feature branches.
-+ **When concept turns into a feature open issue for it.**
+  + **fix/(issue number)/(short description)** for fixes.
+  + **feature/(issue number)/(short description)** for features.
 + **Use draft pull requests for big features.**
-+ **Don't push SVGs exported from draw.io.** Push .drawio file and .png export instead.
 
 ## Game ##
 + **Terrain level is always at Y=0.** There's no elevation change within the level. It's always flat. Characters can't be below terrain level.
