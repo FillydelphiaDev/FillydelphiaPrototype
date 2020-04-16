@@ -1,6 +1,6 @@
-﻿using log4net;
+﻿using System;
+using log4net;
 using UnityEngine;
-using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
 using Utils;
 
@@ -10,7 +10,7 @@ namespace Player
     public class CameraController : MonoBehaviour
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(CameraController));
-        
+
         private const float ViewZoneAdjustStep = 2.0F;
         private const float ViewZoneAdjustError = 0.01F;
 
@@ -35,7 +35,7 @@ namespace Player
         [Tooltip("Minimal size of camera's viewport. Zoom will be adjusted to fit this size.")]
         [SerializeField]
         private float minViewSize = 30.0F;
-        
+
         [Tooltip("The max camera offset by X and Z axes.")]
         [SerializeField]
         private Vector2 maxViewOffset = new Vector2(15.0F, 15.0F);
@@ -53,14 +53,16 @@ namespace Player
         private Vector2 cursorPos;
         private Vector2 screenPos;
 
-        private void OnValidate()
-        {
-            Assert.IsNotNull(offsetObject, "Pivot object should be set");
-            Assert.IsNotNull(player, "Player object should be set");
-        }
-
         private void Awake()
         {
+            if (!offsetObject)
+            {
+                throw new InvalidOperationException("Pivot object should be set");
+            }
+            if (!player)
+            {
+                throw new InvalidOperationException("Player object should be set");
+            }
             gameInput = new GameInput();
             gameInput.Player.CursorPosition.performed += OnCursor;
         }
@@ -108,7 +110,7 @@ namespace Player
             {
                 return;
             }
-            
+
             // Div dist by 2 to map from [-1, 1] to [0, 1]
             // Yes, it's intended that curve is evaluated for dist, not for actual difference
             float distMaxAllowed = adjustingSpeed.Evaluate(distance / 2.0F);
@@ -120,7 +122,8 @@ namespace Player
         {
             Vector3 offset = Vector3.Scale(new Vector3(maxViewOffset.x, 1.0F, maxViewOffset.y),
                 new Vector3(screenPos.x, 0.0F, screenPos.y));
-            Vector3 worldOffset = GeometryUtils.GameImpliedRight * offset.x + GeometryUtils.GameImpliedForward * offset.z;
+            Vector3 worldOffset = GeometryUtils.GameImpliedRight * offset.x +
+                                  GeometryUtils.GameImpliedForward * offset.z;
 
             if (Log.IsDebugEnabled)
             {
