@@ -10,9 +10,7 @@ namespace Player
     public class CameraController : MonoBehaviour
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(CameraController));
-
-        // Hardcoded camera Y angle <3
-        private const float CameraYAngle = 45.0F;
+        
         private const float ViewZoneAdjustStep = 2.0F;
         private const float ViewZoneAdjustError = 0.01F;
 
@@ -120,21 +118,12 @@ namespace Player
 
         private Vector3 CalcWorldOffset()
         {
-            // Calc rotated axes
-            Quaternion rotation = Quaternion.AngleAxis(CameraYAngle, Vector3.up);
-            Vector3 xOffsetAxis = rotation * new Vector3(1.0F, 0.0F, 0.0F);
-            Vector3 zOffsetAxis = rotation * new Vector3(0.0F, 0.0F, 1.0F);
-
             Vector3 offset = Vector3.Scale(new Vector3(maxViewOffset.x, 1.0F, maxViewOffset.y),
                 new Vector3(screenPos.x, 0.0F, screenPos.y));
-            Vector3 worldOffset = xOffsetAxis * offset.x + zOffsetAxis * offset.z;
+            Vector3 worldOffset = GeometryUtils.GameImpliedRight * offset.x + GeometryUtils.GameImpliedForward * offset.z;
 
             if (Log.IsDebugEnabled)
             {
-                // Axes
-                Debug.DrawLine(Vector3.zero, xOffsetAxis, Color.red);
-                Debug.DrawLine(Vector3.zero, zOffsetAxis, Color.blue);
-
                 Debug.DrawLine(Vector3.zero, offset, Color.magenta);
                 Debug.DrawLine(Vector3.zero, worldOffset, Color.cyan);
             }
@@ -172,7 +161,7 @@ namespace Player
 
         private void OnDisable()
         {
-            gameInput.Player.CursorPosition.performed -= OnCursor;
+            gameInput.Player.CursorPosition.Disable();
         }
 
         private void OnDestroy()
@@ -232,7 +221,11 @@ namespace Player
             {
                 screenPoint = controller.NormalizedScreenToPixels(screenPoint);
                 Ray ray = controller.controlled.ScreenPointToRay(screenPoint);
-                return GeometryUtils.GroundAndRayIntersection(ray).GetValueOrDefault() - oldOffset;
+                if (!GeometryUtils.GroundIntersection(ray, out Vector3 intersection))
+                {
+                    Log.Error()?.Call("Somehow camera is not looking at the ground");
+                }
+                return intersection - oldOffset;
             }
 
             private void SetRect(Vector3 offset)

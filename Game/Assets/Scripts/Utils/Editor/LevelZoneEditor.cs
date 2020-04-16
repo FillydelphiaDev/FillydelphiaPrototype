@@ -156,13 +156,11 @@ namespace Utils.Editor
                             Vector2 mousePos = Event.current.mousePosition;
                             Log.Debug()?.Call($"Point moved (index: {i}, " +
                                               $"delta: {delta}, mousePos: {mousePos})");
+                            
                             Ray ray = HandleUtility.GUIPointToWorldRay(mousePos);
-                            Vector3? intersection = GeometryUtils.PlaneAndRayIntersection(
-                                Vector3.zero, Vector3.up,
-                                ray.origin, ray.direction);
-                            if (intersection.HasValue)
+                            if (GeometryUtils.GroundIntersection(ray, out Vector3 intersection))
                             {
-                                points[i] = intersection.Value;
+                                points[i] = intersection;
                             }
                             Event.current.Use();
                         }

@@ -58,3 +58,6 @@ Now, you can use this configuration to set log level for individual characters. 
 </logger>
 ```
 
+## Definitions ##
++ A **ground vector** is a 2D vector X and Y of which are directly mapped to X and Z in the world. I.e. a vector in a ground plane.  
+  Use **`Vector3.FromWorldToGround()`** to convert world vector into ground vector (Y will be omitted) and **`Vector2.FromGroundToWorld()`** to convert it back.  
