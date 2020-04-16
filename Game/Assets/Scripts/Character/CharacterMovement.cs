@@ -6,7 +6,7 @@ using Utils;
 
 namespace Character
 {
-    [RequireComponent(typeof(Character))]
+    [RequireComponent(typeof(Character), typeof(CharacterController))]
     public class CharacterMovement : MonoBehaviour
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(CharacterMovement));
@@ -82,8 +82,9 @@ namespace Character
 
         // Is this worth it?
         private new Transform transform;
-        
+
         private Character character;
+        private CharacterController controller;
 
         private MovementMode currentMode;
 
@@ -142,6 +143,7 @@ namespace Character
             charLog = CommonUtils.GetCharacterLogger<CharacterMovement>(GetInstanceID());
             transform = base.transform;
             character = GetComponent<Character>();
+            controller = GetComponent<CharacterController>();
         }
 
         private void FixedUpdate()
@@ -268,9 +270,19 @@ namespace Character
             speed = character.Modifiers.ApplyModifier<MovementSpeedTrait, float>(speed);
             speed = Mathf.Clamp(speed, 0.0F, MaxPossibleSpeed);
             Vector3 delta = transform.rotation * Vector3.forward * (speed * time);
-            transform.position += delta;
-            charLog?.Debug()?.Call($"{currentMode} {delta.magnitude} in dir " +
-                                   $"{direction.ToStringG3()} with speed {speed}");
+
+            CollisionFlags flags = controller.Move(delta);
+            if (flags == CollisionFlags.None)
+            {
+                charLog?.Debug()?.Call($"{currentMode} {delta.magnitude} in dir " +
+                                       $"{direction.ToStringG3()} at speed {speed}");
+            }
+            else
+            {
+                charLog?.Debug()?.Call(
+                    $"{currentMode} {delta.magnitude} in dir {direction.ToStringG3()}" +
+                    $"at speed {speed} and colliding {flags}");
+            }
         }
 
         private static void CheckSpeedArg(float speed)
