@@ -25,7 +25,7 @@ This is valid concern, yes. Both Fallout and My Little Pony are someone else's I
 + Using any assets without free licenses or explicit permissions. BTW, free license doesn't mean we shouldn't credit author.
 
 #### How can I help? ####
-Please join [our Discord server](https://discord.gg/ybrMuCr) if you want to make a contribution.
+Please join [our Discord server](https://discord.gg/GVR2Nhm) if you want to make a contribution.
 
 #### Я не знаю английского, что делать? ####
 Это не проблема, в Дискорд сервере есть русскоязычный канал. Вам переведут, если что-то непонятно, или вас переведут, если у вас есть идея.

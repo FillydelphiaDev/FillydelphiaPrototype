@@ -4,7 +4,7 @@ A project aimed to create a prototype of a top-down shooter RPG in the setting o
 
 The prototype uses **Unity 2020.1** game engine. That means we use new shiny things such as **Universal Render Pipeline**, **Shader Graph**, **C# 7.3**, new **InputSystem** and so on.  
 
-Join **[the Discord server](https://discord.gg/ybrMuCr)** if you have any questions or you want to contribute.  
+Join **[the Discord server](https://discord.gg/GVR2Nhm)** if you have any questions or you want to contribute.  
 
 ![Logo](Raw/Meta/FillydelphiaTempLogo.png)  
 
