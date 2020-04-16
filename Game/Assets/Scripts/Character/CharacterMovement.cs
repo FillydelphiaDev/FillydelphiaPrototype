@@ -1,18 +1,23 @@
 ﻿using System;
 using Character.Trait;
+using log4net;
 using UnityEngine;
+using Utils;
 
 namespace Character
 {
     [RequireComponent(typeof(Character))]
     public class CharacterMovement : MonoBehaviour
     {
-        private const float MaxPossibleSpeed = 100.0F;
+        private static readonly ILog Log = LogManager.GetLogger(typeof(CharacterMovement));
 
+        private const float MaxPossibleSpeed = 100.0F;
         private const float RotationError = 0.001F;
 
+        private ILog charLog;
+
         [SerializeField]
-        private float walkingSpeed = 3.0F;
+        private float walkingSpeed = 7.0F;
 
         public float WalkingSpeed
         {
@@ -21,11 +26,12 @@ namespace Character
             {
                 CheckSpeedArg(value);
                 walkingSpeed = value;
+                charLog.Debug()?.Call($"Walking speed set to {value}");
             }
         }
 
         [SerializeField]
-        private float runningSpeed = 7.0F;
+        private float runningSpeed = 12.0F;
 
         public float RunningSpeed
         {
@@ -34,11 +40,12 @@ namespace Character
             {
                 CheckSpeedArg(value);
                 runningSpeed = value;
+                charLog.Debug()?.Call($"Running speed set to {value}");
             }
         }
 
         [SerializeField]
-        private float sneakingSpeed = 2.0F;
+        private float sneakingSpeed = 4.0F;
 
         public float SneakingSpeed
         {
@@ -47,6 +54,7 @@ namespace Character
             {
                 CheckSpeedArg(value);
                 sneakingSpeed = value;
+                charLog.Debug()?.Call($"Sneaking speed set to {value}");
             }
         }
 
@@ -64,6 +72,7 @@ namespace Character
                     throw new ArgumentException("Rotation speed can't be less than 0");
                 }
                 rotationSpeed = value;
+                charLog.Debug()?.Call($"Rotation speed set to {value}");
             }
         }
 
@@ -71,6 +80,9 @@ namespace Character
         [SerializeField]
         private bool updateEachFrame = false;
 
+        // Is this worth it?
+        private new Transform transform;
+        
         private Character character;
 
         private MovementMode currentMode;
@@ -78,29 +90,31 @@ namespace Character
         public MovementMode Mode
         {
             get => currentMode;
-            set => currentMode = value;
-        }
-
-        private Vector3 currentDirection;
-        private Vector3 targetDirection;
-
-        public Vector3 CurrentDirection
-        {
-            get => currentDirection;
             set
             {
-                currentDirection = new Vector3(value.x, 0.0F, value.z).normalized;
-                targetDirection = currentDirection;
+                currentMode = value;
+                charLog.Debug()?.Call($"Movement mode set to {value}");
             }
         }
 
+        private Vector2 direction;
+
         /// <summary>
+        /// This is ground vector.
         /// This is not always the current moving direction as character has rotation speed.
         /// </summary>
-        private Vector3 Direction
+        public Vector2 Direction
         {
-            get => targetDirection;
-            set => targetDirection = new Vector3(value.x, 0.0F, value.z).normalized;
+            get => direction;
+            set
+            {
+                if (Mathf.Approximately(value.sqrMagnitude, 0.0F))
+                {
+                    throw new ArgumentException("Direction can't be zero-length vector");
+                }
+                direction = value.normalized;
+                charLog.Debug()?.Call($"Direction set to {value.ToStringG3()}");
+            }
         }
 
         private bool moving;
@@ -108,7 +122,11 @@ namespace Character
         public bool Moving
         {
             get => moving;
-            set => moving = value;
+            set
+            {
+                moving = value;
+                charLog.Debug()?.Call($"Moving state set to {value}");
+            }
         }
 
         private void OnValidate()
@@ -121,6 +139,8 @@ namespace Character
 
         private void Awake()
         {
+            charLog = CommonUtils.GetCharacterLogger<CharacterMovement>(GetInstanceID());
+            transform = base.transform;
             character = GetComponent<Character>();
         }
 
@@ -128,7 +148,7 @@ namespace Character
         {
             if (!updateEachFrame)
             {
-                DoWork(Time.fixedTime);
+                UpdateMovement(Time.fixedDeltaTime);
             }
         }
 
@@ -136,11 +156,11 @@ namespace Character
         {
             if (updateEachFrame)
             {
-                DoWork(Time.deltaTime);
+                UpdateMovement(Time.deltaTime);
             }
         }
 
-        private void DoWork(float time)
+        private void UpdateMovement(float time)
         {
             Rotate(time);
             Move(time);
@@ -148,24 +168,47 @@ namespace Character
 
         private void Rotate(float time)
         {
-            Vector3 diff = targetDirection - currentDirection;
-            if (Math.Abs(diff.x) < RotationError && Math.Abs(diff.z) < RotationError)
+            Quaternion rotation = transform.rotation;
+            Vector2 currentDir = (rotation * Vector3.forward).FromWorldToGround();
+
+            // Skip rotation if angle is unnoticeable
+            float angle = Vector2.Angle(currentDir, direction);
+            if (angle < RotationError)
             {
                 return;
             }
+
             if (!character.Modifiers.ApplyModifier<CanRotateTrait, bool>(true))
             {
                 return;
             }
 
+            // Clamp rotation per time
             float modifiedRotationSpeed =
                 character.Modifiers.ApplyModifier<RotationSpeedTrait, float>(rotationSpeed);
+            float delta = Mathf.Min(modifiedRotationSpeed * time, angle);
 
-            float maxAngle = modifiedRotationSpeed * time;
-            float currentAngle = Vector3.Angle(currentDirection, targetDirection);
-            float angle = Mathf.Min(currentAngle, maxAngle);
+            // Apply delta rotation
+            Quaternion targetRotation = Quaternion.LookRotation(direction.FromGroundToWorld());
+            rotation = Quaternion.RotateTowards(rotation, targetRotation, delta);
+            transform.rotation = rotation;
 
-            currentDirection = Quaternion.Euler(0.0F, 0.0F, angle) * currentDirection;
+            if (Log.IsDebugEnabled)
+            {
+                Vector3 player = transform.position;
+                // Current dir
+                Debug.DrawRay(player, currentDir.FromGroundToWorld(), Color.cyan);
+                // Target dir
+                Debug.DrawRay(player, targetRotation * Vector3.forward, Color.blue);
+                // New dir
+                Debug.DrawRay(player, rotation * Vector3.forward,
+                    Color.magenta);
+            }
+            if (charLog.IsDebugEnabled)
+            {
+                Vector2 newDir = (rotation * Vector3.forward).FromWorldToGround();
+                charLog.Debug($"Rotated for {angle} deg, new dir {newDir.ToStringG3()}");
+            }
         }
 
         private void Move(float time)
@@ -195,11 +238,8 @@ namespace Character
 
         private void Walk(float time)
         {
-            float speed = walkingSpeed;
-            speed = character.Modifiers.ApplyModifier<MovementSpeedTrait, float>(speed);
-            speed = character.Modifiers.ApplyModifier<WalkingSpeedTrait, float>(speed);
-            speed = Mathf.Clamp(speed, 0.0F, MaxPossibleSpeed);
-            transform.position += currentDirection * (speed * time);
+            float speed = character.Modifiers.ApplyModifier<WalkingSpeedTrait, float>(walkingSpeed);
+            ApplySpeed(speed, time);
         }
 
         private void Run(float time)
@@ -208,11 +248,8 @@ namespace Character
             {
                 Walk(time);
             }
-            float speed = runningSpeed;
-            speed = character.Modifiers.ApplyModifier<MovementSpeedTrait, float>(speed);
-            speed = character.Modifiers.ApplyModifier<RunningSpeedTrait, float>(speed);
-            speed = Mathf.Clamp(speed, 0.0F, MaxPossibleSpeed);
-            transform.position += currentDirection * (speed * time);
+            float speed = character.Modifiers.ApplyModifier<RunningSpeedTrait, float>(runningSpeed);
+            ApplySpeed(speed, time);
         }
 
         private void Sneak(float time)
@@ -221,11 +258,19 @@ namespace Character
             {
                 Walk(time);
             }
-            float speed = sneakingSpeed;
+            float speed =
+                character.Modifiers.ApplyModifier<SneakingSpeedTrait, float>(sneakingSpeed);
+            ApplySpeed(speed, time);
+        }
+
+        private void ApplySpeed(float speed, float time)
+        {
             speed = character.Modifiers.ApplyModifier<MovementSpeedTrait, float>(speed);
-            speed = character.Modifiers.ApplyModifier<SneakingSpeedTrait, float>(speed);
             speed = Mathf.Clamp(speed, 0.0F, MaxPossibleSpeed);
-            transform.position += currentDirection * (speed * time);
+            Vector3 delta = transform.rotation * Vector3.forward * (speed * time);
+            transform.position += delta;
+            charLog?.Debug()?.Call($"{currentMode} {delta.magnitude} in dir " +
+                                   $"{direction.ToStringG3()} with speed {speed}");
         }
 
         private static void CheckSpeedArg(float speed)
