@@ -58,7 +58,7 @@ namespace Utils
         /// </summary>
         /// <param name="listener">Listener to remove.</param>
         /// <exception cref="ArgumentException">If listener is not registered.</exception>
-        public void RemoveModifier<TEvent>(Func<TEvent, TEvent> listener) where TEvent : struct
+        public void RemoveListener<TEvent>(Func<TEvent, TEvent> listener) where TEvent : struct
         {
             listeners.TryGetValue(typeof(TEvent), out OrderedListenerList eventListeners);
 
