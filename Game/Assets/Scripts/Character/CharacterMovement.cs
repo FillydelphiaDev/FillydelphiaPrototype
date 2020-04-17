@@ -1,5 +1,4 @@
 ﻿using System;
-using Character.Trait;
 using log4net;
 using UnityEngine;
 using Utils;
@@ -180,14 +179,19 @@ namespace Character
                 return;
             }
 
-            if (!character.Modifiers.ApplyModifier<CanRotateTrait, bool>(true))
+            // Raise an event
+            RotationEvent rotationEvent =
+                new RotationEvent(currentDir, direction, true, rotationSpeed);
+            character.Events.Dispatch(ref rotationEvent);
+            if (!rotationEvent.CanRotate)
             {
+                charLog.Debug()?.Call($"Rotation was cancelled by event");
                 return;
             }
 
             // Clamp rotation per time
             float modifiedRotationSpeed =
-                character.Modifiers.ApplyModifier<RotationSpeedTrait, float>(rotationSpeed);
+                Mathf.Clamp(rotationEvent.RotationSpeed, 0.0F, float.MaxValue);
             float delta = Mathf.Min(modifiedRotationSpeed * time, angle);
 
             // Apply delta rotation
@@ -219,68 +223,42 @@ namespace Character
             {
                 return;
             }
-            if (!character.Modifiers.ApplyModifier<CanMoveTrait, bool>(true))
+
+            Vector2 dir = (transform.rotation * Vector3.forward).FromWorldToGround();
+
+            // Raise mode event
+            MovementModeEvent modeEvent = new MovementModeEvent(dir, currentMode);
+            character.Events.Dispatch(ref modeEvent);
+            if (charLog.IsDebugEnabled && currentMode != modeEvent.Mode)
             {
+                charLog.Debug($"Mode was changed by event from {currentMode} to {modeEvent.Mode}");
+            }
+
+            float speed = GetSpeedForMode(modeEvent.Mode);
+            
+            // Raise movement event
+            MovementEvent movementEvent = new MovementEvent(dir, currentMode, time, true, speed);
+            character.Events.Dispatch(ref movementEvent);
+
+            if (!movementEvent.CanMove)
+            {
+                charLog.Debug()?.Call($"Movement was cancelled by event");
                 return;
             }
 
-            switch (currentMode)
-            {
-                case MovementMode.Walking:
-                    Walk(time);
-                    break;
-                case MovementMode.Running:
-                    Run(time);
-                    break;
-                case MovementMode.Sneaking:
-                    Sneak(time);
-                    break;
-            }
-        }
-
-        private void Walk(float time)
-        {
-            float speed = character.Modifiers.ApplyModifier<WalkingSpeedTrait, float>(walkingSpeed);
-            ApplySpeed(speed, time);
-        }
-
-        private void Run(float time)
-        {
-            if (!character.Modifiers.ApplyModifier<CanRunTrait, bool>(true))
-            {
-                Walk(time);
-            }
-            float speed = character.Modifiers.ApplyModifier<RunningSpeedTrait, float>(runningSpeed);
-            ApplySpeed(speed, time);
-        }
-
-        private void Sneak(float time)
-        {
-            if (!character.Modifiers.ApplyModifier<CanSneakTrait, bool>(true))
-            {
-                Walk(time);
-            }
-            float speed =
-                character.Modifiers.ApplyModifier<SneakingSpeedTrait, float>(sneakingSpeed);
-            ApplySpeed(speed, time);
-        }
-
-        private void ApplySpeed(float speed, float time)
-        {
-            speed = character.Modifiers.ApplyModifier<MovementSpeedTrait, float>(speed);
-            speed = Mathf.Clamp(speed, 0.0F, MaxPossibleSpeed);
-            Vector3 delta = transform.rotation * Vector3.forward * (speed * time);
+            speed = Mathf.Clamp(movementEvent.Speed, 0.0F, MaxPossibleSpeed);
+            Vector3 delta = dir.FromGroundToWorld() * (speed * time);
 
             CollisionFlags flags = controller.Move(delta);
             if (flags == CollisionFlags.None)
             {
-                charLog?.Debug()?.Call($"{currentMode} {delta.magnitude} in dir " +
+                charLog?.Debug()?.Call($"{modeEvent.Mode} {delta.magnitude} in dir " +
                                        $"{direction.ToStringG3()} at speed {speed}");
             }
             else
             {
                 charLog?.Debug()?.Call(
-                    $"{currentMode} {delta.magnitude} in dir {direction.ToStringG3()}" +
+                    $"{modeEvent.Mode} {delta.magnitude} in dir {direction.ToStringG3()}" +
                     $"at speed {speed} and colliding {flags}");
             }
         }
@@ -294,6 +272,20 @@ namespace Character
             }
         }
 
+        private float GetSpeedForMode(MovementMode mode)
+        {
+            switch (mode)
+            {
+                case MovementMode.Walking:
+                    return walkingSpeed;
+                case MovementMode.Running:
+                    return runningSpeed;
+                case MovementMode.Sneaking:
+                    return sneakingSpeed;
+            }
+            throw new InvalidOperationException();
+        }
+
         public enum MovementMode
         {
             Walking,
@@ -301,72 +293,57 @@ namespace Character
             Sneaking
         }
 
-        /// <summary>
-        /// This includes all movement modes. E.g. if this is false, then char won't move at all.
-        /// </summary>
-        public sealed class CanMoveTrait : Trait<bool>
+        public struct RotationEvent
         {
-            private CanMoveTrait()
+            // Info
+            public Vector2 CurrentDirection { get; }
+            public Vector2 TargetDirection { get; }
+
+            public bool CanRotate { get; set; }
+            public float RotationSpeed { get; set; }
+
+            public RotationEvent(Vector2 currentDirection, Vector2 targetDirection, bool canRotate,
+                float rotationSpeed)
             {
+                CurrentDirection = currentDirection;
+                TargetDirection = targetDirection;
+                CanRotate = canRotate;
+                RotationSpeed = rotationSpeed;
             }
         }
 
-        /// <summary>
-        /// Use to modify any movement mode speed.
-        /// </summary>
-        public sealed class MovementSpeedTrait : Trait<float>
+        public struct MovementModeEvent
         {
-            private MovementSpeedTrait()
+            // Info
+            public Vector2 Direction { get; }
+
+            public MovementMode Mode { get; set; }
+
+            public MovementModeEvent(Vector2 direction, MovementMode mode)
             {
+                Direction = direction;
+                Mode = mode;
             }
         }
 
-        public sealed class WalkingSpeedTrait : Trait<float>
+        public struct MovementEvent
         {
-            private WalkingSpeedTrait()
-            {
-            }
-        }
+            // Info
+            public Vector2 Direction { get; }
+            public MovementMode Mode { get; }
+            public float Time { get; }
 
-        public sealed class CanRunTrait : Trait<bool>
-        {
-            private CanRunTrait()
-            {
-            }
-        }
+            public bool CanMove { get; set; }
+            public float Speed { get; set; }
 
-        public sealed class RunningSpeedTrait : Trait<float>
-        {
-            private RunningSpeedTrait()
+            public MovementEvent(Vector2 direction, MovementMode mode, float time, bool canMove,
+                float speed)
             {
-            }
-        }
-
-        public sealed class CanSneakTrait : Trait<bool>
-        {
-            private CanSneakTrait()
-            {
-            }
-        }
-
-        public sealed class SneakingSpeedTrait : Trait<float>
-        {
-            private SneakingSpeedTrait()
-            {
-            }
-        }
-
-        public sealed class CanRotateTrait : Trait<bool>
-        {
-            private CanRotateTrait()
-            {
-            }
-        }
-
-        public sealed class RotationSpeedTrait : Trait<float>
-        {
-            private RotationSpeedTrait()
-            {
+                Direction = direction;
+                Mode = mode;
+                Time = time;
+                CanMove = canMove;
+                Speed = speed;
             }
         }
     }
