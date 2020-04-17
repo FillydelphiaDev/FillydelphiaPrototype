@@ -19,6 +19,7 @@
   + **development** - dev branch. Small changes can be merged here right away. For bigger ones please use feature branches.
   + **concept/(issue number)-(name)** for concept.
   + **feature/(issue number)-(name)** for features.
+  + **enhancement/(issue number)-(name)** for enhancements for existing features. If enhancement is big enough - it's a feature.
   + **fix/(issue number)-(name)** for fixes.
   + **docs/(issue number)-(name)** for docs.
 
