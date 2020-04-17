@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Character.Trait;
 using log4net;
 using UnityEngine;
+using Utils;
 
 namespace Character
 {
@@ -13,19 +14,22 @@ namespace Character
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(Character));
 
+        private ILog charLog;
+
         private TraitModifiers modifiers;
 
         public TraitModifiers Modifiers => modifiers;
 
         private void Awake()
         {
+            charLog = CommonUtils.GetCharacterLogger<Character>(GetInstanceID());
             modifiers = new TraitModifiers();
         }
 
         private void OnDestroy()
         {
             // Send warning if someone forgot to unregister modifier
-            if (Log.IsWarnEnabled && !modifiers.IsEmpty())
+            if (charLog.IsWarnEnabled && !modifiers.IsEmpty())
             {
                 IDictionary<Type, ICollection<(int, object)>> leftoverModifiers =
                     modifiers.GetAllModifiers();
@@ -37,8 +41,8 @@ namespace Character
                         Delegate func = (Delegate) modifier.Item2;
                         modifiersToLog.Add($"{func.Target.GetType()}#{func.Method.Name}");
                     }
-                    Log.Warn($"Trait {trait.Key} has active modifiers upon character " +
-                             $"{GetInstanceID()} deletion: {string.Join(", ", modifiersToLog)}");
+                    charLog.Warn($"Trait {trait.Key} has active modifiers " +
+                                 $"upon deletion: {string.Join(", ", modifiersToLog)}");
                 }
             }
         }

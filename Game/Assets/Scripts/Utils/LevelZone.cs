@@ -12,6 +12,7 @@ namespace Utils
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(LevelZone));
 
+        // Ground vectors
         [SerializeField]
         private Vector2[] points =
         {
@@ -22,32 +23,18 @@ namespace Utils
 
         public Vector2[] Points
         {
-            get
-            {
-                Vector2[] copy = new Vector2[points.Length];
-                Array.Copy(points, copy, points.Length);
-                return copy;
-            }
+            get => points.Copy();
             set
             {
                 CheckMinSize(value.Length);
-                points = new Vector2[value.Length];
-                Array.Copy(value, points, value.Length);
+                points = value.Copy();
             }
         }
 
         public Vector3[] GetPointsInWorld()
         {
             Vector3 offset = transform.position;
-
-            Vector3[] pointsInWorld = new Vector3[points.Length];
-            for (int i = 0; i < points.Length; i++)
-            {
-                Vector2 point = points[i];
-                pointsInWorld[i] = new Vector3(point.x, 0.0F, point.y) + offset;
-            }
-
-            return pointsInWorld;
+            return FromLocalToWorld(points, offset);
         }
 
         public void SetPointsInWorld(Vector3[] pointsInWorld)
@@ -55,13 +42,7 @@ namespace Utils
             CheckMinSize(pointsInWorld.Length);
 
             Vector3 offset = transform.position;
-
-            points = new Vector2[pointsInWorld.Length];
-            for (int i = 0; i < points.Length; i++)
-            {
-                Vector3 point = pointsInWorld[i] - offset;
-                points[i] = new Vector2(point.x, point.z);
-            }
+            points = FromWorldToLocal(pointsInWorld, offset);
         }
 
         public int PointCount()
@@ -76,8 +57,7 @@ namespace Utils
 
         public bool IsWorldPointInZone(Vector3 worldPoint)
         {
-            Vector3 point = worldPoint - transform.position;
-            return IsPointInZone(new Vector2(point.x, point.z));
+            return IsPointInZone((worldPoint - transform.position).FromWorldToGround());
         }
 
         public bool IsPolygonInZone(Vector2[] polyPoints)
@@ -88,13 +68,7 @@ namespace Utils
         public bool IsWorldPolygonInZone(Vector3[] worldPolyPoints)
         {
             Vector3 offset = transform.position;
-            Vector2[] polyPoints = new Vector2[worldPolyPoints.Length];
-            for (int i = 0; i < worldPolyPoints.Length; i++)
-            {
-                Vector3 point = worldPolyPoints[i] - offset;
-                polyPoints[i] = new Vector2(point.x, point.z);
-            }
-
+            Vector2[] polyPoints = FromWorldToLocal(worldPolyPoints, offset);
             return GeometryUtils.IsPolygonInPolygon(polyPoints, points);
         }
 
@@ -121,5 +95,25 @@ namespace Utils
                 throw new ArgumentException("Zone can't have less than 3 points");
             }
         }
+
+        private Vector2[] FromWorldToLocal(Vector3[] worldPoints, Vector3 offset)
+        {
+            Vector2[] localPoints = new Vector2[worldPoints.Length];
+            for (int i = 0; i < worldPoints.Length; i++)
+            {
+                localPoints[i] = (worldPoints[i] - offset).FromWorldToGround();
+            }
+            return localPoints;
+        }
+
+        private Vector3[] FromLocalToWorld(Vector2[] localPoints, Vector3 offset)
+        {
+            Vector3[] worldPoints = new Vector3[localPoints.Length];
+            for (int i = 0; i < localPoints.Length; i++)
+            {
+                worldPoints[i] = localPoints[i].FromGroundToWorld() + offset;
+            }
+            return worldPoints;
+        } 
     }
 }
