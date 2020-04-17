@@ -36,9 +36,9 @@ namespace Utils
             return vec.ToString("G6");
         }
 
-        public static ILog GetCharacterLogger<T>(int id) where T : MonoBehaviour
+        public static ILog GetInstanceLogger<T>(int instance)
         {
-            return LogManager.GetLogger(typeof(T).FullName + "@Character." + id);
+            return LogManager.GetLogger(typeof(T).FullName + ".Instance." + instance);
         }
     }
 }

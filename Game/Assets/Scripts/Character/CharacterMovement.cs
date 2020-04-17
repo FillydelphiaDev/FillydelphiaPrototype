@@ -140,7 +140,7 @@ namespace Character
 
         private void Awake()
         {
-            charLog = CommonUtils.GetCharacterLogger<CharacterMovement>(GetInstanceID());
+            charLog = CommonUtils.GetInstanceLogger<CharacterMovement>(GetInstanceID());
             transform = base.transform;
             character = GetComponent<Character>();
             controller = GetComponent<CharacterController>();

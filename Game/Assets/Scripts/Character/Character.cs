@@ -22,8 +22,8 @@ namespace Character
 
         private void Awake()
         {
-            charLog = CommonUtils.GetCharacterLogger<Character>(GetInstanceID());
             modifiers = new TraitModifiers();
+            charLog = CommonUtils.GetInstanceLogger<Character>(GetInstanceID());
         }
 
         private void OnDestroy()

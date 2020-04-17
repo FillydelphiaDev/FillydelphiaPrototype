@@ -54,17 +54,17 @@ log4net uses XML configuration. You can find `log4net.xml` in the Assets folder,
 
 ```
 
-### Character logging ###
+### Instance logging ###
 
-You can also log individual characters. When writing a character script, get a per-character logger with a function below and use it per script instance.
+You can also log from instances. Get a logger with a function below and use it per instance.
 ```csharp
-CommonUtils.GetCharacterLogger<CharacterComponent>(instanceId)
+CommonUtils.GetInstanceLogger<Type>(instanceId)
 ```
 
-Now, you can use this configuration to set log level for individual characters. Keep in mind that per-class logger and this logger have nothing in common, and you can't set their log level at the same time.
+Now, you can use this configuration to set log level for instances.
 ```xml
-<!-- If you don't specify instance id, it will be applied for all characters. -->
-<logger name="Character.CharacterComponent@Character.(instance id)"> 
+<!-- If you don't specify instance id, it will be applied for all instances. -->
+<logger name="Namespace.Type.Instance.(instance id)"> 
     <level value="DEBUG"/>
 </logger>
 ```
