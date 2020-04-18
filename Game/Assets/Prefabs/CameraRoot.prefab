@@ -191,8 +191,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   offsetObject: {fileID: 7596660784183404442}
-  minViewSize: 20
-  maxViewOffset: {x: 10, y: 10}
+  player: {fileID: 0}
+  minViewSize: 15
+  maxViewOffset: {x: 7.5, y: 7.5}
   adjustingSpeed:
     serializedVersion: 2
     m_Curve:

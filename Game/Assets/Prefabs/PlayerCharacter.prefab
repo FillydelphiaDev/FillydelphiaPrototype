@@ -154,9 +154,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5811d87b60154748a848e4377d382c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkingSpeed: 7
-  runningSpeed: 12
-  sneakingSpeed: 4
+  walkingSpeed: 3.5
+  runningSpeed: 7
+  sneakingSpeed: 2
   rotationSpeed: 720
   updateEachFrame: 1
 --- !u!143 &3999287726386007783
