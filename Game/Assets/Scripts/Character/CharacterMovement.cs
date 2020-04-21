@@ -9,14 +9,21 @@ namespace Character
     public class CharacterMovement : MonoBehaviour
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(CharacterMovement));
+        
+        private const float MaxPossibleSpeed = 100.0F;
+        private static readonly int AnimationSneakingProperty = Animator.StringToHash("Sneaking");
+        private static readonly int AnimationSpeedProperty = Animator.StringToHash("Speed");
+        
 
-        private float MaxPossibleSpeed = 100.0F;
 
         private ILog charLog;
 
         // Is this worth it?
         private new Transform transform;
 
+        private bool hasAnimator;
+        private Animator animator;
+        
         private Character character;
         private CharacterController controller;
 
@@ -91,12 +98,20 @@ namespace Character
             transform = base.transform;
             character = GetComponent<Character>();
             controller = GetComponent<CharacterController>();
+            animator = character.Animator;
+            hasAnimator = animator;
         }
 
         private void Update()
         {
             transform.rotation = Quaternion.LookRotation(direction);
 
+            if (hasAnimator)
+            {
+                animator.SetBool(AnimationSneakingProperty, sneaking);
+                animator.SetFloat(AnimationSpeedProperty, moving ? speed : 0.0F);
+            }
+            
             if (!moving)
             {
                 return;
