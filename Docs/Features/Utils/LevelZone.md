@@ -1,7 +1,6 @@
 # Level Zone #
 
 Level Zone is a convinient utility for cases when you need some sort of polygonal zone on the level but you can't use triggers or colliders.  
-Example use: zone available for camera view.  
 
 ![Example](LevelZoneExample.gif)
 

@@ -9,79 +9,13 @@ namespace Utils
         public const float CameraYAngle = 45.0F;
         private static Quaternion cameraYRotation = Quaternion.AngleAxis(CameraYAngle, Vector3.up);
         public static Quaternion CameraYRotation => cameraYRotation;
-        private static Vector3 gameImpliedRight = Vector3.right.ApplyCameraRotation();
-        public static Vector3 GameImpliedRight => gameImpliedRight;
-        private static Vector3 gameImpliedForward = Vector3.forward.ApplyCameraRotation();
-        public static Vector3 GameImpliedForward => gameImpliedForward;
-        
+
         private static Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
         public static Plane GroundPlane => groundPlane;
 
-        /// <summary>
-        /// Rotate by <see cref="CameraYAngle"/>> on up axis.
-        /// </summary>
-        public static Vector3 ApplyCameraRotation(this Vector3 vec)
+        public static Vector3 ClearY(this Vector3 vec)
         {
-            return cameraYRotation * vec;
-        }
-
-        /// <summary>
-        /// Only for ground vectors.
-        /// Rotate by <see cref="CameraYAngle"/>> on up axis.
-        /// </summary>
-        public static Vector2 ApplyCameraRotation(this Vector2 vec)
-        {
-            return (cameraYRotation * vec.FromGroundToWorld()).FromWorldToGround();
-        }
-
-        /// <summary>
-        /// Convert to ground vector: the same as using X and Z of 3D vec as X and Y of 2D vec.
-        /// </summary>
-        public static Vector2 FromWorldToGround(this Vector3 vec)
-        {
-            return new Vector2(vec.x, vec.z);
-        }
-
-        /// <summary>
-        /// Convert an array of world vectors into the ground vectors.
-        /// </summary>
-        public static Vector2[] FromWorldToGround(this Vector3[] arr)
-        {
-            Vector2[] newArr = new Vector2[arr.Length];
-            for (int i = 0; i < arr.Length; i++)
-            {
-                newArr[i] = arr[i].FromWorldToGround();
-            }
-            object[] obj = new object[0];
-            newArr.Copy();
-            newArr.Copy();
-            newArr.Copy();
-            newArr.Copy();
-
-            return newArr;
-        }
-
-
-        /// <summary>
-        /// Only for ground vectors.
-        /// Convert to world vector: the same as using X and Y of 2D vec as X and Z of 3D vec.
-        /// </summary>
-        public static Vector3 FromGroundToWorld(this Vector2 vec)
-        {
-            return new Vector3(vec.x, 0.0F, vec.y);
-        }
-
-        /// <summary>
-        /// Convert an array of ground vectors into the world vectors.
-        /// </summary>
-        public static Vector3[] FromGroundToWorld(this Vector2[] arr)
-        {
-            Vector3[] newArr = new Vector3[arr.Length];
-            for (int i = 0; i < arr.Length; i++)
-            {
-                newArr[i] = arr[i].FromGroundToWorld();
-            }
-            return newArr;
+            return new Vector3(vec.x, 0.0F, vec.z);
         }
 
         /// <summary>

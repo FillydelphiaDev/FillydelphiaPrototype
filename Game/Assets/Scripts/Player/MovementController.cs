@@ -28,7 +28,7 @@ namespace Player
         private GameInput gameInput;
 
         private bool moving;
-        private Vector2 direction;
+        private Vector3 direction;
         private bool sprinting;
         private bool sneaking;
 
@@ -61,7 +61,7 @@ namespace Player
         private void OnMovementPerformed(InputAction.CallbackContext context)
         {
             Vector2 raw = context.ReadValue<Vector2>();
-            direction = raw.ApplyCameraRotation();
+            direction = GeometryUtils.CameraYRotation * new Vector3(raw.x, 0.0F, raw.y);
             Log.Debug()?.Call($"Movement performed: raw = {raw}, rotated = {direction}");
         }
 

@@ -21,12 +21,12 @@ namespace Character
         private CharacterController controller;
 
         // Updated each frame
-        private Vector2 direction = Vector3.forward.FromWorldToGround();
+        private Vector3 direction = Vector3.forward;
 
         /// <summary>
         /// This is ground vector.
         /// </summary>
-        public Vector2 Direction
+        public Vector3 Direction
         {
             get => direction;
             set
@@ -35,7 +35,7 @@ namespace Character
                 {
                     throw new ArgumentException("Direction can't be zero-length vector");
                 }
-                direction = value.normalized;
+                direction = value.normalized.ClearY();
                 charLog.Debug()?.Call($"New direction set to {value.ToStringG3()}");
             }
         }
@@ -95,14 +95,14 @@ namespace Character
 
         private void Update()
         {
-            transform.rotation = Quaternion.LookRotation(direction.FromGroundToWorld());
+            transform.rotation = Quaternion.LookRotation(direction);
 
             if (!moving)
             {
                 return;
             }
 
-            Vector3 delta = direction.FromGroundToWorld() * (speed * Time.deltaTime);
+            Vector3 delta = direction * (speed * Time.deltaTime);
             CollisionFlags flags = controller.Move(delta);
             if (flags == CollisionFlags.None)
             {
