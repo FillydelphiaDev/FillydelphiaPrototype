@@ -11,12 +11,26 @@ namespace Player
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(MovementController));
 
+        [SerializeField]
+        private float walkingSpeed = 7.0F;
+
+        [SerializeField]
+        private float sprintingSpeed = 12.0F;
+
+        [SerializeField]
+        private float sneakingSpeed = 2.0F;
+
+        [SerializeField]
+        private float fastSneakingSpeed = 4.0F;
+
         private CharacterMovement characterMovement;
 
         private GameInput gameInput;
 
-        private bool sprintActive;
-        private bool sneakActive;
+        private bool moving;
+        private Vector2 direction;
+        private bool sprinting;
+        private bool sneaking;
 
         private void Awake()
         {
@@ -40,70 +54,73 @@ namespace Player
 
         private void OnMovementStarted(InputAction.CallbackContext context)
         {
-            characterMovement.Moving = true;
+            moving = true;
             Log.Debug()?.Call("Movement started");
         }
 
         private void OnMovementPerformed(InputAction.CallbackContext context)
         {
             Vector2 raw = context.ReadValue<Vector2>();
-            Vector2 direction = characterMovement.Direction = raw.ApplyCameraRotation();
+            direction = raw.ApplyCameraRotation();
             Log.Debug()?.Call($"Movement performed: raw = {raw}, rotated = {direction}");
         }
 
         private void OnMovementCanceled(InputAction.CallbackContext context)
         {
-            characterMovement.Moving = false;
+            moving = false;
             Log.Debug()?.Call("Movement ended");
         }
 
         private void OnSprintStarted(InputAction.CallbackContext context)
         {
-            sprintActive = true;
-            if (!sneakActive)
-            {
-                characterMovement.Mode = CharacterMovement.MovementMode.Running;
-                Log.Debug()?.Call("Sprint started, Running mode set");
-            }
-            else
-            {
-                Log.Debug()?.Call("Sprint started, Running mode not set because Sneak is active");
-            }
+            sprinting = true;
+            Log.Debug()?.Call("Sprint started");
         }
 
         private void OnSprintCanceled(InputAction.CallbackContext context)
         {
-            sprintActive = false;
-            if (!sneakActive)
-            {
-                characterMovement.Mode = CharacterMovement.MovementMode.Walking;
-                Log.Debug()?.Call("Sprint ended, Walking mode set");
-            }
-            else
-            {
-                Log.Debug()?.Call("Sprint ended, Walking mode not set because Sneak is active");
-            }
+            sprinting = false;
+            Log.Debug()?.Call("Sprint ended");
         }
 
         private void OnSneakStarted(InputAction.CallbackContext context)
         {
-            sneakActive = true;
-            characterMovement.Mode = CharacterMovement.MovementMode.Sneaking;
-            Log.Debug()?.Call("Sneak started, Sneaking mode set");
+            sneaking = true;
+            Log.Debug()?.Call("Sneak started");
         }
 
         private void OnSneakCanceled(InputAction.CallbackContext context)
         {
-            sneakActive = false;
-            if (!sprintActive)
+            sneaking = false;
+            Log.Debug()?.Call("Sneak ended");
+        }
+
+        private void Update()
+        {
+            characterMovement.Moving = moving;
+            if (moving)
             {
-                characterMovement.Mode = CharacterMovement.MovementMode.Walking;
-                Log.Debug()?.Call("Sneak started, Walking mode set");
+                characterMovement.Direction = direction;
+                if (sprinting && sneaking)
+                {
+                    characterMovement.Speed = fastSneakingSpeed;
+                }
+                else if (sprinting)
+                {
+                    characterMovement.Speed = sprintingSpeed;
+                }
+                else if (sneaking)
+                {
+                    characterMovement.Speed = sneakingSpeed;
+                }
+                else
+                {
+                    characterMovement.Speed = walkingSpeed;
+                }
             }
             else
             {
-                characterMovement.Mode = CharacterMovement.MovementMode.Running;
-                Log.Debug()?.Call("Sneak started, Running mode set because Sprint is active");
+                characterMovement.Speed = 0.0F;
             }
         }
 
