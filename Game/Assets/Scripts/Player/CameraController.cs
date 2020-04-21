@@ -104,10 +104,10 @@ namespace Player
 
         private void ApplyWorldOffset()
         {
+            Quaternion cameraYRot = GeometryUtils.CameraYRotation;
             Vector3 offset = Vector3.Scale(new Vector3(maxViewOffset.x, 1.0F, maxViewOffset.y),
                 new Vector3(screenPos.x, 0.0F, screenPos.y));
-            Vector3 worldOffset = GeometryUtils.GameImpliedRight * offset.x +
-                                  GeometryUtils.GameImpliedForward * offset.z;
+            Vector3 worldOffset = cameraYRot * offset;
 
             if (Log.IsDebugEnabled)
             {

@@ -2,6 +2,7 @@
 
 Every single mob, NPC, and the player himself is a character.  
 
-[Characters have traits](TraitModifiers.md).  
+### Character Systems ###
 
-### Character Systems Index ###
+In the execution order:
++ **Character Movement** - move and rotate character. Has sneaking state.
