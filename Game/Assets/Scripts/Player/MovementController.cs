@@ -98,6 +98,8 @@ namespace Player
         private void Update()
         {
             characterMovement.Moving = moving;
+            characterMovement.Sneaking = sneaking;
+            
             if (moving)
             {
                 characterMovement.Direction = direction;
