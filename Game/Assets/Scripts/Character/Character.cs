@@ -11,6 +11,11 @@ namespace Character
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(Character));
 
+        [SerializeField]
+        private Animator animator;
+
+        public Animator Animator => animator;
+
         private ILog charLog;
 
         private void Awake()
