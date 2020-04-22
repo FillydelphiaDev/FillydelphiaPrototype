@@ -24,7 +24,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -6422726829235514164, guid: 82ac4b4fea1de2146bff8fb423281b4e, type: 3}
+  m_Motion: {fileID: -6422726829235514164, guid: 9852e99b5ed0d1147a15fe06555c5e68, type: 3}
   m_Tag: 
   m_SpeedParameter: _SprintAnimSpeed
   m_MirrorParameter: 
@@ -220,7 +220,7 @@ MonoBehaviour:
   property: Speed
   speedProperty: _TrotAnimSpeed
   valueRange: {x: 4, y: 9}
-  speedRange: {x: 1, y: 3}
+  speedRange: {x: 1, y: 4}
 --- !u!1107 &-3883019901475218880
 AnimatorStateMachine:
   serializedVersion: 5
@@ -309,7 +309,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7208466633754730995, guid: 23de2f62afe5c674ebcc202a1645adeb, type: 3}
+  m_Motion: {fileID: 7208466633754730995, guid: 9852e99b5ed0d1147a15fe06555c5e68, type: 3}
   m_Tag: 
   m_SpeedParameter: _CrawlingAnimSpeed
   m_MirrorParameter: 
@@ -339,7 +339,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 3527428990276832932, guid: deabe547b5b94744c83ea69ce6e4ce4d, type: 3}
+  m_Motion: {fileID: 3527428990276832932, guid: 9852e99b5ed0d1147a15fe06555c5e68, type: 3}
   m_Tag: 
   m_SpeedParameter: _WalkAnimSpeed
   m_MirrorParameter: 
@@ -367,7 +367,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 3957436220055844714, guid: 791f3bba0227cd44f85da5c2f097efbf, type: 3}
+  m_Motion: {fileID: 3957436220055844714, guid: 9852e99b5ed0d1147a15fe06555c5e68, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -440,37 +440,37 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Speed
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: _WalkAnimSpeed
     m_Type: 1
     m_DefaultFloat: 1
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: _TrotAnimSpeed
     m_Type: 1
     m_DefaultFloat: 1
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: _SprintAnimSpeed
     m_Type: 1
     m_DefaultFloat: 1
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: _CrawlingAnimSpeed
     m_Type: 1
     m_DefaultFloat: 1
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -605,7 +605,7 @@ MonoBehaviour:
   property: Speed
   speedProperty: _SprintAnimSpeed
   valueRange: {x: 9, y: 20}
-  speedRange: {x: 1, y: 3}
+  speedRange: {x: 1, y: 4}
 --- !u!1101 &3051396209253063059
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -712,7 +712,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7576583114032974847, guid: 6d03ac07cae257e4784fcfbebd16372e, type: 3}
+  m_Motion: {fileID: -6918746626455487446, guid: 9852e99b5ed0d1147a15fe06555c5e68, type: 3}
   m_Tag: 
   m_SpeedParameter: _TrotAnimSpeed
   m_MirrorParameter: 
@@ -743,7 +743,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 3496704400873537144, guid: 5107cad6c78ec7c408c7240503804103, type: 3}
+  m_Motion: {fileID: 3496704400873537144, guid: 9852e99b5ed0d1147a15fe06555c5e68, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
