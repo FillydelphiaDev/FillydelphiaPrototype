@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Body
-  m_Shader: {fileID: -6465566751694194690, guid: e400fd5e89635a343b17672ca892b1cf, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 37fca36dcbaeb0a4bb36d27371f33fa4, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -63,6 +63,38 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - bodyBaseMap:
+        m_Texture: {fileID: 2800000, guid: 6e1e9752af69a804caa6833f87abc7b6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - bodyEmissiveMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - bodyNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - bodyPBRMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - cutieBaseMap:
+        m_Texture: {fileID: 2800000, guid: f71a47220905fc14fb4f39868fb8d5b6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - cutieEmissiveMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - cutieNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - cutiePBRMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
     - Vector1_40B1CDD6: 0.2
     - Vector1_D06A196A: 0
@@ -87,6 +119,16 @@ Material:
     - _Surface: 0
     - _WorkflowMode: 1
     - _ZWrite: 1
+    - bodyEmissiveBrightness: 1
+    - bodyMetallicMultiplier: 0
+    - bodySmoothnessMultiplier: 0.2
+    - cutieEmissiveBrightness: 1
+    - cutieMetallicMultiplier: 0
+    - cutieReverseHorizontal: 1
+    - cutieReverseVertical: 0
+    - cutieRotation: 50
+    - cutieScale: 0.75
+    - cutieSmoothnessMultiplier: 0.4
     m_Colors:
     - Color_2FE28AD4: {r: 0.9372549, g: 0.9137255, b: 0.60784316, a: 1}
     - Color_50A6EF3A: {r: 0, g: 1, b: 0, a: 1}
@@ -95,6 +137,12 @@ Material:
     - _Color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
+    - bodyPrimaryColor: {r: 0.9372549, g: 0.9137255, b: 0.60784316, a: 1}
+    - bodySecondaryColor: {r: 0, g: 1, b: 0, a: 1}
+    - bodyTertiaryColor: {r: 0, g: 0, b: 1, a: 1}
+    - cutieOffset: {r: 0, g: 0.025, b: 0, a: 0}
+    - cutiePosLeft: {r: 0.2949219, g: 0.296875, b: 0.4189453, a: 0.4208984}
+    - cutiePosRight: {r: 0.5947266, g: 0.296875, b: 0.71875, a: 0.4208984}
   m_BuildTextureStacks: []
 --- !u!114 &8387253258875673311
 MonoBehaviour:
