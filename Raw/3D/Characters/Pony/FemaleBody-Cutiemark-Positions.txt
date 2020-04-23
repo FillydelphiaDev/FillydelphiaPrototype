@@ -1,0 +1,12 @@
+Pixel pos (0, 0) is upper left.
+UV (0, 0) is lower left.
+
+First pos is pixel, second is UV.
+
+Left:
+	From (302, 720) = (0.294921875, 0.296875)
+	To (429, 593) = (0.418945312, 0.420898438)
+
+Right:
+	From (609, 720) = (0.594726562, 0.296875)
+	To (736, 593) = (0.71875, 0.420898438)
