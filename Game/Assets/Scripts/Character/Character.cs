@@ -12,7 +12,7 @@ namespace Character
         private static readonly ILog Log = LogManager.GetLogger(typeof(Character));
 
         [SerializeField]
-        private Animator animator;
+        private Animator animator = null;
 
         public Animator Animator => animator;
 
