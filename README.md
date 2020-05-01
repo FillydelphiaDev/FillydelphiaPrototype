@@ -1,4 +1,7 @@
-# Fillydelphia Prototype #
+# Fillydelphia Prototype - CANCELLED #
+
+**You know, this is funny. This project has been started 3 times since the end 2018, and after each time I got some time consuming offer you just can't say no to. Unfortunately, the project is impossible without dedicating at least 4 hrs a day. Thus, I declare the idea cursed and promise to never ever return to it again. Sorry to those who were involved.**  
+**- Shimmermare.**
 
 A project aimed to create a prototype of a top-down shooter RPG in the setting of Fallout: Equestria. 
 
